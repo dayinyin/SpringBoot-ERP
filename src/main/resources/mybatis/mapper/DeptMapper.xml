@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.SpringBoot.dao.DeptImp">
+	<select id="select" resultType="com.SpringBoot.bean.Dept">
+		select a.*,b.name as pname from sys_dept a join sys_dept b on a.pid = b.id
+			<where>
+				<if test="name!=null">
+			    and a.name like '%${name}%'
+			    </if>
+			    <if test="address!=null">
+			    and a.address like '%${address}%'
+			    </if>
+			    <if test="remark!=null">
+			    and a.remark like '%${remark}%'
+			    </if>
+			</where>
+			limit #{index},#{limit}
+	</select>
+
+	<insert id="insert">
+		insert into sys_dept (pid,name,open, remark,address,available,ordernum,createtime) values (#{pid},#{name},#{open},#{remark},#{address},#{available},#{ordernum},#{createtime});
+	</insert>
+	
+	<update id="update">	
+		update sys_dept set pid=#{pid},name=#{name} ,open=#{open},
+		remark=#{remark},address=#{address},available=#{available},ordernum=#{ordernum}
+		 where id=#{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sys_dept where id = #{id}
+	</delete>
+	
+	<select id="selectAll" resultType="com.SpringBoot.bean.Dept">
+		select * from sys_dept
+	</select>
+	
+	<select id="selectById" resultType="com.SpringBoot.bean.Dept">
+		select * from sys_dept where id=#{id}
+	</select>
+	
+	<select id="selectByPid" resultType="com.SpringBoot.bean.Dept">
+		select * from sys_dept where pid=#{pid}
+	</select>
+		
+</mapper>

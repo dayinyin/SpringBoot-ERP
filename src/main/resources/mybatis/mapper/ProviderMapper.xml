@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.SpringBoot.dao.ProviderImp">
+
+	<select id="select" resultType="com.SpringBoot.bean.Provider">
+		select * from bus_provider
+				<where>
+					<if test="providername!=null">
+				    and providername like '%${providername}%'
+				    </if>
+				    <if test="connectionperson!=null">
+				    and connectionperson like '%${connectionperson}%'
+				    </if>
+				    <if test="phone!=null">
+				    and phone like '%${phone}%'
+				    </if>
+				</where>
+				limit #{index},#{limit}		
+	</select>
+	
+	<select id="selectAvailable" resultType="com.SpringBoot.bean.Provider">
+		select * from bus_provider where available=1
+	</select>
+	
+	<insert id="insert">
+			
+	insert into bus_provider (providername,zip,address,telephone,connectionperson,phone,bank,account,email,fax,available) 
+	values 
+	(#{providername},#{zip},#{address},#{telephone},#{connectionperson},#{phone},#{bank},#{account},#{email},#{fax},#{available});
+	
+	</insert>
+	
+	<update id="update">
+		update bus_provider set providername=#{providername},zip=#{zip} ,address=#{address},
+		telephone=#{telephone},connectionperson=#{connectionperson},phone=#{phone},bank=#{bank}
+		,account=#{account},email=#{email},fax=#{fax},available=#{available}
+		 where id=#{id}
+	</update>
+	
+	<delete id="delete">
+		delete from bus_provider where id=#{id}
+	</delete>
+
+</mapper> 

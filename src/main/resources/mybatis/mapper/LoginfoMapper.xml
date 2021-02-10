@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.SpringBoot.dao.LoginfoImp">
+	<select id="select" resultType="com.SpringBoot.bean.Loginfo">
+		select * from sys_loginfo
+		<where>
+			<if test="loginname!=null">
+		    and loginname like '%${loginname}%'
+		    </if>
+		    <if test="loginip!=null">
+		    and loginip like '%${loginip}%'
+		    </if>
+		</where>
+		limit #{index},#{limit}
+	</select>
+	
+	<insert id="insert">
+		insert into sys_loginfo (loginname,loginip,logintime) values (#{loginname},#{loginip},#{logintime});
+	</insert>
+	
+	<delete id="delete">
+		delete from sys_loginfo where id = #{id}
+	</delete>
+</mapper>

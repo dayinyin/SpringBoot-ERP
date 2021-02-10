@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.SpringBoot.dao.SalesImp" >
+	
+	<select id="select" resultType="com.SpringBoot.bean.Sales">
+		select * from bus_sales s join bus_customer c on s.customerid=c.id join bus_goods g on s.goodsid=g.id
+			<where>
+				<if test="customerid!=null">
+				   and s.customerid =#{customerid}
+				   </if>
+				   <if test="goodsid!=null">
+				   and s.goodsid =#{goodsid}
+				  </if>
+			</where>
+			limit #{index},#{limit}
+	</select>
+	
+	<insert id="insert">
+		insert into bus_sales(customerid,paytype,salestime,operateperson,number,remark,saleprice,goodsid)
+		values
+		(#{customerid},#{paytype},#{salestime},#{operateperson},#{number},#{remark},#{saleprice},#{goodsid})
+	</insert>
+	
+	<update id="update">
+		update bus_sales set customerid=#{customerid},paytype=#{paytype},salestime=#{salestime},operateperson=#{operateperson}
+		,number=#{number},remark=#{remark},saleprice=#{saleprice},goodsid=#{goodsid}
+		where id=#{id}
+	</update>
+	
+	<delete id="delete">
+		delete from bus_sales where id=#{id}
+	</delete>
+	
+	<select id="selectById" resultType="com.SpringBoot.bean.Sales">
+		select * from bus_sales where id=#{id}
+	</select>
+	
+	<update id="updateNumber">
+		update bus_sales set number=#{number} where id=#{id}
+	</update>
+</mapper>

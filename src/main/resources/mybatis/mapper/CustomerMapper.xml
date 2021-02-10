@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.SpringBoot.dao.CustomerImp">
+ 
+ 	<select id="select" resultType="com.SpringBoot.bean.Customer">
+ 		select * from bus_customer 
+ 		<where>
+ 			<if test="customername!=null">
+ 				and customername like '%${customername}%'
+ 			</if>
+ 			<if test="connectionpersion!=null">
+ 				and connectionpersion like '%${connectionpersion}%'
+ 			</if>
+ 			<if test="phone!=null">
+ 				and phone like '%${phone}%'
+ 			</if>
+ 		</where>
+ 		limit #{index},#{limit}
+ 	
+ 	</select>
+ 		
+ 	<select id="selectName" resultType="com.SpringBoot.bean.Customer">
+ 		select * from bus_customer where available=1
+ 	</select>
+ 
+ 	<insert id="insert">
+ 		insert into bus_customer (customername,zip,address,telephone,connectionpersion,phone,bank,account,email,fax,available)
+ 		values
+ 		(#{customername},#{zip},#{address},#{telephone},#{connectionpersion},#{phone},#{bank},#{account},#{email},#{fax},#{available})
+ 	</insert>
+ 	
+ 	<update id="update">
+ 		update bus_customer set customername=#{customername},zip=#{zip},address=#{address},telephone=#{telephone},
+ 		connectionpersion=#{connectionpersion},phone=#{phone},bank=#{bank},account=#{account},email=#{email},
+ 		fax=#{fax},available=#{available}
+ 		where id=#{id}
+ 	</update>
+ 	
+ 	<delete id="delete">
+ 		delete from bus_customer where id=#{id}
+ 	</delete>
+ 	
+ </mapper>

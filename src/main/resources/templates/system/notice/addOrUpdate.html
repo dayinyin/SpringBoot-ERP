@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../resources/layui/css/layui.css">
+    <link rel="stylesheet" href="../resources/css/public.css"/>
+    <script type="text/javascript" src="../resources/layui/layui.js"></script>
+    <script src="../resources/tinymce/tinymce.min.js"></script>
+</head>
+<body>
+<div style="padding: 10px">
+    <form method="post" id="formData" lay-filter="formData">
+        <div class="layui-form-item">
+            <label class="layui-form-label">公告标题</label>
+            <div class="layui-input-block">
+                <input type="hidden" name="id">
+                <input type="text" name="title" lay-verify="required" autocomplete="off" placeholder="请输入标题"
+                       class="layui-input"></div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">公告内容</label>
+            <div class="layui-input-block">
+                <textarea name="content" id="addOrUpdateText"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="text-align: center;">
+                <button type="button" class="layui-btn" lay-submit lay-filter="doSubmit"><span
+                        class="layui-icon layui-icon-add-1"></span>提交
+                </button>
+                <button type="reset" class="layui-btn layui-btn-warm"><span
+                        class="layui-icon layui-icon-refresh-1"></span>重置
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+
+    tinymce.init({
+        selector: '#addOrUpdateText',
+        language: "zh_CN"
+    });
+
+    /**
+     * 获取url参数，回显内容，更新操作专用
+     * @param name
+     * @returns {string|null}
+     */
+    function getQueryString(name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return decodeURI(r[2]);
+        }
+        return null;
+    }
+
+    layui.use(['jquery', 'form'], function () {
+        var form = layui.form;
+        var $ = layui.jquery;
+        tinyId = 'addOrUpdateText';
+        //通过url参数赋值给表单
+        $('[name="id"]').val(getQueryString("id"));
+        $('[name="title"]').val(getQueryString("title"));
+        $('[name="content"]').val(getQueryString("content"));
+        let content = getQueryString('content');
+        if (content != null) {
+            tinyMCE.editors[tinyId].setContent();
+        }
+
+        form.on('submit(doSubmit)', function (data) {
+
+            //在提交数据前，同步内容到textarea，这样下面才能拿得到数据
+            tinyMCE.editors[tinyId].save();
+            $.post('/notice/addNotice', $('#formData').serialize(), function (res) {
+                if (res.code == 200) {
+                    //在父窗口里得到当前iframe层的索引
+                    var index = parent.layer.getFrameIndex(window.name);
+                    //再执行关闭
+                    parent.layer.close(index);
+                    //重载父级页面的表格
+                    parent.layui.table.reload('noticeTable');
+                }
+                layer.msg(res.msg);
+            });
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+    });
+</script>
+</body>
+</html>

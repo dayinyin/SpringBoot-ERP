@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.SpringBoot.dao.GoodsImp">
+
+	<select id="selectById" resultType="com.SpringBoot.bean.Goods">
+		select * from bus_goods where id=#{id}
+	</select>
+
+	<select id="select" resultType="com.SpringBoot.bean.Goods">
+		select * from bus_goods g join bus_provider p on g.providerid = p.id 
+		<where>
+			
+			<if test="providerid!=null">
+		    and g.providerid like '%${providerid}%'
+		    </if>
+		    <if test="goodsname!=null">
+		    and g.goodsname like '%${goodsname}%'
+		    </if>
+		    <if test="productcode!=null">
+		    and g.productcode like '%${productcode}%'
+		    </if>
+		    <if test="promitcode!=null">
+		    and g.promitcode like '%${promitcode}%'
+		    </if>
+		    <if test="description!=null">
+		    and g.description like '%${description}%'
+		    </if>
+		    <if test="size!=null">
+		    and g.size like '%${size}%'
+		    </if>
+		</where>
+		limit #{index},#{limit}
+	</select>
+
+	<insert id="insert">
+		insert into bus_goods (providerid, goodsname, productcode,promitcode, description, size, produceplace,goodspackage, price, number, dangernum, available) 
+		values 
+		(#{providerid},#{goodsname},#{ productcode},#{promitcode},#{description},#{size},#{produceplace},#{goodspackage},#{price},#{number},#{dangernum},#{available});
+	</insert>
+
+	<delete id="delete">
+		delete from bus_goods where id = #{id}
+	</delete>
+	
+	<update id="update">	
+		update bus_goods set providerid=#{providerid},goodsname=#{goodsname} ,productcode=#{productcode},
+		promitcode=#{promitcode},description=#{description},size=#{size},produceplace=#{produceplace}
+		,goodspackage=#{goodspackage}, price=#{ price}, number=#{ number}, dangernum=#{ dangernum}, available=#{available}
+		 where id=#{id}
+	</update>
+	
+	<select id="selectGoodsName" resultType="com.SpringBoot.bean.Goods">
+		select g.*,p.* from bus_goods g join bus_provider p on g.providerid = p.id 
+	</select>
+	
+	<update id="updateNumber">
+		update bus_goods set number=#{number} where id=#{id}
+	</update>
+
+	<select id="selectByProviderid" resultType="com.SpringBoot.bean.Goods">
+		select g.*,p.* from bus_goods g join bus_provider p on g.providerid = p.id where g.providerid=#{providerid}
+	</select>
+
+</mapper>

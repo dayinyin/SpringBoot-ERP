@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.SpringBoot.dao.PermissionImp">
+	
+	<select id="selectmenu" resultType="com.SpringBoot.bean.Permission">
+		select * from sys_permission where type = 'menu' 
+	</select>
+	
+	<select id="selectPid" resultType="com.SpringBoot.bean.Permission">
+		select * from sys_permission where pid=#{pid} 
+	</select>
+	
+	<select id="selectPermission" resultType="com.SpringBoot.bean.Permission">
+		select * from sys_permission where type = 'permission' 
+	</select>
+	
+	<select id="selectAll" resultType="com.SpringBoot.bean.Permission">
+		select * from sys_permission 
+	</select>
+	
+	<select id="select" resultType="com.SpringBoot.bean.Permission">
+		select a.* ,b.title as ptitle from sys_permission a join sys_permission b on a.pid = b.id
+		<where>
+			<if test="title!=null">
+				and a.title like '%${title}%'
+			</if>
+		</where> 
+		limit #{index},#{limit}
+	</select>
+	
+	<select id="select2" resultType="com.SpringBoot.bean.Permission">
+		select a.* ,b.title as ptitle from sys_permission a join sys_permission b on a.pid = b.id
+		<where>
+			<if test="title!=null">
+				and a.title like '%${title}%'
+			</if>
+			<if test="percode!=null">
+				and a.percode like '%${percode}%'
+			</if>
+		</where> 
+		limit #{index},#{limit}
+	</select>
+	
+	<insert id="insert">
+		insert into sys_permission (pid,title,icon,href,target,open,ordernum,available,type) 
+		values 
+		(#{pid},#{title},#{icon},#{href},#{target},#{open},#{ordernum},#{available},'menu');
+	</insert>
+	
+	<delete id="delete">
+		delete from sys_permission where id=#{id}
+	</delete>
+	
+	<update id="update">	
+		update sys_permission set pid=#{pid},title=#{title} ,icon=#{icon},
+		href=#{href},target=#{target},open=#{open},ordernum=#{ordernum},available=#{available}
+		 where id=#{id}
+	</update>
+	
+	<insert id="insert2">
+		insert into sys_permission (pid,title,percode,open,ordernum,available,type) 
+		values 
+		(#{pid},#{title},#{percode},#{open},#{ordernum},#{available},'permission');
+	</insert>
+</mapper>

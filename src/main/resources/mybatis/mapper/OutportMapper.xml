@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.SpringBoot.dao.OutportImp">
+
+	<select id="select" resultType="com.SpringBoot.bean.Outport">
+		select * from bus_outport o join bus_goods g on o.goodsid=g.id 
+			join bus_provider p on o.providerid=p.id 
+				<where>
+					<if test="providerid!=null">
+				    and o.providerid =#{providerid}
+				    </if>
+				    <if test="goodsid!=null">
+				    and o.goodsid =#{goodsid}
+				    </if>
+				</where>
+				limit #{index},#{limit}
+	</select>
+	
+	<insert id="insert">
+		insert into bus_outport (paytype,outputtime, operateperson, number, remark, outportprice, providerid, goodsid) 
+		values 
+		(#{paytype},#{outputtime},#{operateperson},#{number},#{remark},#{outportprice},#{providerid},#{goodsid});
+	
+	</insert>
+	
+	<delete id="delete">
+		delete from bus_outport where id = #{id}
+	</delete>
+	
+	<select id="selectID" resultType="com.SpringBoot.bean.Outport">
+		select * from bus_outport where id = #{id}
+	</select>
+	
+</mapper>

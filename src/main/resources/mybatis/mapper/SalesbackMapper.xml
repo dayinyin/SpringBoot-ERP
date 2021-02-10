@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+  <mapper namespace="com.SpringBoot.dao.SalesbackImp">
+  
+	<select id="select" resultType="com.SpringBoot.bean.Salesback">
+		select * from bus_salesback s join bus_customer c on s.customerid=c.id join bus_goods g on s.goodsid=g.id
+		<where>
+			<if test="customerid!=null">
+			 and s.customerid =#{customerid}
+			</if>
+			<if test="goodsid!=null">
+			 and s.goodsid =#{goodsid}
+			</if>
+		</where>
+		limit #{index},#{limit}
+	</select>
+	
+	<delete id="delete">
+		delete from bus_salesback where id=#{id}
+	</delete>
+	
+	<insert id="insert">
+		insert into bus_salesback(customerid,paytype,salesbacktime,salebackprice,operateperson,number,remark,goodsid)
+		values
+		(#{customerid},#{paytype},#{salesbacktime},#{salebackprice},#{operateperson},#{number},#{remark},#{goodsid})
+	</insert>
+  
+  </mapper>

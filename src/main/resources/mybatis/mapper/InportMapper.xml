@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.SpringBoot.dao.InportImp">
+	<select id="select" resultType="com.SpringBoot.bean.Inport">
+		select i.*,g.*,p.* from bus_inport i join bus_goods g on i.goodsid=g.id 
+			join bus_provider p on i.providerid=p.id
+			<where>
+				<if test="providerid!=null">
+			    and i.providerid =#{providerid}
+			    </if>
+			    <if test="goodsid!=null">
+			    and i.goodsid =#{goodsid}
+			    </if>
+			</where>
+			limit #{index},#{limit}
+	</select>
+	
+	<insert id="insert">
+		insert into bus_inport (paytype,inporttime, operateperson, number, remark, inportprice, providerid, goodsid) 
+		values 
+		(#{paytype},#{inporttime},#{operateperson},#{number},#{remark},#{inportprice},#{providerid},#{goodsid});
+	</insert>
+	
+	<update id="update">
+
+		update bus_inport set paytype=#{paytype},inporttime=#{inporttime},number=#{number},remark=#{remark},inportprice=#{inportprice}, providerid=#{providerid},
+		goodsid=#{goodsid},operateperson=#{operateperson}
+		  where id=#{id}
+	</update>
+
+	<delete id="delete">
+		delete from bus_inport where id = #{id}
+	</delete>
+	
+	<select id="selectById" resultType="com.SpringBoot.bean.Inport">
+		select * from bus_inport where id=#{id}
+	</select>
+	
+</mapper>
